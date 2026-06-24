@@ -1438,3 +1438,73 @@ h1 span {
     }
   }
 }
+@media (max-width: 480px) {
+  .hero,
+  .hero-copy,
+  .hero-actions,
+  .primary-btn,
+  .ghost-btn {
+    max-width: 100%;
+  }
+
+  .hero {
+    overflow-x: clip;
+    padding-inline: 10px;
+  }
+
+  .hero-copy {
+    min-width: 0;
+  }
+
+  .eyebrow {
+    font-size: clamp(0.62rem, 3vw, 0.7rem);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  h1 {
+    width: 100%;
+    font-size: clamp(2.35rem, 11.6vw, 3.08rem);
+    line-height: 0.96;
+  }
+
+  h1 span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-text {
+    max-width: 100%;
+    font-size: clamp(0.92rem, 4vw, 1rem);
+  }
+
+  .hero-actions {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .primary-btn,
+  .ghost-btn {
+    min-width: 0;
+    padding-inline: 12px;
+    font-size: 0.95rem;
+  }
+
+  .primary-btn span {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 370px) {
+  .brand span:last-child {
+    max-width: 106px;
+  }
+
+  .nav-cta {
+    padding-inline: 8px;
+  }
+
+  h1 {
+    font-size: clamp(2.18rem, 11vw, 2.55rem);
+  }
+}
