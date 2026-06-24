@@ -138,6 +138,12 @@ const mediaItems = [
 ];
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isLowPowerViewport = window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
+const globeItems = isLowPowerViewport ? mediaItems.slice(0, 8) : mediaItems;
+
+if (isLowPowerViewport) {
+  document.documentElement.classList.add("low-power-mobile");
+}
 const globe = document.querySelector("#mediaGlobe");
 const stage = document.querySelector("#globeStage");
 const featuredType = document.querySelector("#featuredType");
@@ -156,7 +162,7 @@ let targetX = rotationX;
 let targetY = rotationY;
 let activeIndex = 0;
 let isDragging = false;
-let isPaused = prefersReducedMotion;
+let isPaused = prefersReducedMotion || isLowPowerViewport;
 let dragStart = { x: 0, y: 0, rx: 0, ry: 0 };
 let lastFrame = performance.now();
 
@@ -183,16 +189,24 @@ function createMediaElement(item, options = {}) {
   return image;
 }
 
+function createVideoPlaceholder(index) {
+  const frame = document.createElement("div");
+  const variants = ["frame-street", "frame-event", "frame-brand"];
+  frame.className = `generated-frame ${variants[index % variants.length]}`;
+  frame.setAttribute("aria-hidden", "true");
+  return frame;
+}
+
 function createGlobeCards() {
   const fragment = document.createDocumentFragment();
 
-  mediaItems.forEach((item, index) => {
+  globeItems.forEach((item, index) => {
     const card = document.createElement("button");
     card.className = `globe-card ${item.kind === "video" ? "is-video" : ""}`;
     card.type = "button";
     card.setAttribute("aria-label", `${item.type}: ${item.title}`);
     card.dataset.index = String(index);
-    card.append(createMediaElement(item));
+    card.append(isLowPowerViewport && item.kind === "video" ? createVideoPlaceholder(index) : createMediaElement(item));
 
     const label = document.createElement("span");
     label.textContent = item.label;
@@ -212,7 +226,7 @@ function createGlobeCards() {
 
 function positionCards() {
   const cards = [...stage.querySelectorAll(".globe-card")];
-  const radius = globe.offsetWidth * 0.35;
+  const radius = globe.offsetWidth * (isLowPowerViewport ? 0.31 : 0.35);
 
   cards.forEach((card, index) => {
     const phi = Math.acos(-1 + (2 * index + 1) / cards.length);
@@ -227,7 +241,7 @@ function positionCards() {
     card.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), ${z}px) rotateY(${-rotationY}deg) rotateX(${-rotationX}deg) scale(${scale})`;
     card.style.opacity = opacity.toFixed(2);
     card.style.zIndex = String(Math.round(depth * 100));
-    card.style.filter = `brightness(${0.78 + depth * 0.42})`;
+    card.style.filter = isLowPowerViewport ? "none" : `brightness(${0.78 + depth * 0.42})`;
   });
 
   stage.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -238,6 +252,8 @@ function playActiveGlobeMedia() {
     video.pause();
   });
 
+  if (isLowPowerViewport) return;
+
   const activeCard = stage.querySelector(`.globe-card[data-index="${activeIndex}"]`);
   const activeVideo = activeCard?.querySelector("video");
   if (activeVideo && !prefersReducedMotion) {
@@ -246,8 +262,8 @@ function playActiveGlobeMedia() {
 }
 
 function setActive(index, snapGlobe = false) {
-  activeIndex = (index + mediaItems.length) % mediaItems.length;
-  const item = mediaItems[activeIndex];
+  activeIndex = (index + globeItems.length) % globeItems.length;
+  const item = globeItems[activeIndex];
 
   featuredType.textContent = item.type;
   featuredTitle.textContent = item.title;
@@ -264,6 +280,12 @@ function setActive(index, snapGlobe = false) {
     isPaused = true;
     pauseButton.textContent = "Retomar giro";
   }
+
+  if (isLowPowerViewport) {
+    rotationX = targetX;
+    rotationY = targetY;
+    positionCards();
+  }
 }
 
 function animate(now) {
@@ -278,7 +300,7 @@ function animate(now) {
   rotationY += (targetY - rotationY) * 0.08;
   positionCards();
 
-  const nextActive = Math.abs(Math.round(rotationY / 28)) % mediaItems.length;
+  const nextActive = Math.abs(Math.round(rotationY / 28)) % globeItems.length;
   if (!isDragging && !isPaused && nextActive !== activeIndex) {
     setActive(nextActive);
   }
@@ -294,7 +316,7 @@ function handlePointerDown(event) {
     rx: targetX,
     ry: targetY,
   };
-  globe.setPointerCapture(event.pointerId);
+  if (!isLowPowerViewport) globe.setPointerCapture(event.pointerId);
 }
 
 function handlePointerMove(event) {
@@ -304,11 +326,17 @@ function handlePointerMove(event) {
   const dy = event.clientY - dragStart.y;
   targetY = dragStart.ry + dx * 0.34;
   targetX = Math.max(-34, Math.min(28, dragStart.rx - dy * 0.24));
+
+  if (isLowPowerViewport) {
+    rotationX = targetX;
+    rotationY = targetY;
+    positionCards();
+  }
 }
 
 function handlePointerUp(event) {
   isDragging = false;
-  globe.releasePointerCapture(event.pointerId);
+  if (globe.hasPointerCapture(event.pointerId)) globe.releasePointerCapture(event.pointerId);
 }
 
 function openLightbox(item) {
@@ -349,7 +377,17 @@ function initGallery() {
     };
 
     const video = card.querySelector("video");
-    if (video && !prefersReducedMotion) {
+    if (video && isLowPowerViewport) {
+      video.pause();
+      video.preload = "none";
+      video.querySelectorAll("source").forEach((source) => {
+        source.dataset.src = source.src;
+        source.removeAttribute("src");
+      });
+      video.load();
+    }
+
+    if (video && !prefersReducedMotion && !isLowPowerViewport) {
       card.addEventListener("mouseenter", () => video.play().catch(() => {}));
       card.addEventListener("mouseleave", () => {
         video.pause();
@@ -397,9 +435,15 @@ setActive(0);
 positionCards();
 initGallery();
 initReveal();
-requestAnimationFrame(animate);
+if (!isLowPowerViewport) {
+  requestAnimationFrame(animate);
+}
 
-window.addEventListener("resize", positionCards);
+let resizeTimer;
+window.addEventListener("resize", () => {
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(positionCards, 120);
+});
 
 lightbox.addEventListener("click", (event) => {
   if (event.target === lightbox) closeLightbox();
@@ -435,7 +479,7 @@ globe.addEventListener("keydown", (event) => {
   }
 
   if (event.key === "Enter") {
-    openLightbox(mediaItems[activeIndex]);
+    openLightbox(globeItems[activeIndex]);
   }
 });
 

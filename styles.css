@@ -1157,3 +1157,284 @@ h1 span {
     max-height: 58svh;
   }
 }
+
+@media (max-width: 760px), (pointer: coarse) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  body {
+    background: linear-gradient(145deg, #07090c 0%, #12171c 54%, #23282d 100%);
+  }
+
+  body::before,
+  body::after {
+    display: none;
+  }
+
+  .site-header,
+  .portrait-badge,
+  .hero-strip span,
+  .play-button,
+  .media-lightbox,
+  .globe-card.is-video::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .media-card:hover img,
+  .media-card:hover video,
+  .media-card:hover .generated-frame,
+  .media-card:focus-visible video,
+  .primary-btn:hover,
+  .nav-cta:hover,
+  .ghost-btn:hover,
+  .control-btn:hover {
+    transform: none;
+    filter: none;
+  }
+
+  .media-card[data-open]::after {
+    display: none;
+  }
+
+  .media-globe {
+    touch-action: pan-y;
+    perspective: 800px;
+  }
+
+  .globe-card {
+    transition: none;
+    will-change: transform;
+  }
+
+  .globe-controls [data-spin="toggle"] {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .shell {
+    width: min(100% - 24px, 1160px);
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .site-header {
+    top: 8px;
+    width: calc(100% - 16px);
+    min-height: 56px;
+    padding: 8px 9px 8px 11px;
+    background: rgba(8, 10, 13, 0.86);
+  }
+
+  .brand {
+    min-width: 0;
+    gap: 8px;
+    font-size: 0.86rem;
+  }
+
+  .brand span:last-child {
+    max-width: 128px;
+  }
+
+  .brand-mark {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 0 0 4px rgba(244, 123, 32, 0.14);
+  }
+
+  .nav-cta {
+    flex: 0 0 auto;
+    padding: 10px 9px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .hero {
+    gap: 28px;
+    min-height: 100svh;
+    padding-top: 96px;
+    padding-inline: 12px;
+    padding-bottom: 48px;
+  }
+
+  .hero-bg {
+    background-position: 56% top;
+    filter: none;
+  }
+
+  .eyebrow {
+    margin-bottom: 14px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    max-width: 100%;
+    font-size: clamp(2.85rem, 14vw, 4rem);
+    line-height: 0.9;
+  }
+
+  h2 {
+    max-width: 100%;
+    font-size: clamp(2rem, 10vw, 3.1rem);
+    line-height: 0.98;
+  }
+
+  h3 {
+    font-size: 1.16rem;
+  }
+
+  .hero-text,
+  .section-lead,
+  .globe-copy p,
+  .about-copy p,
+  .service-list p {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .hero-text {
+    margin-top: 22px;
+  }
+
+  .hero-actions {
+    margin-top: 26px;
+  }
+
+  .primary-btn,
+  .ghost-btn {
+    min-height: 48px;
+  }
+
+  .hero-portrait {
+    justify-self: center;
+    width: min(300px, 78vw);
+    min-width: 0;
+  }
+
+  .portrait-ring {
+    inset: -12px;
+    animation: none;
+  }
+
+  .portrait-badge {
+    max-width: 164px;
+    padding: 10px;
+  }
+
+  .portrait-badge strong {
+    font-size: 0.82rem;
+  }
+
+  .hero-strip span {
+    padding: 13px 14px;
+    font-size: 0.78rem;
+  }
+
+  .work-intro {
+    gap: 22px;
+    padding-bottom: 24px;
+  }
+
+  .media-grid {
+    grid-auto-rows: 238px;
+    gap: 12px;
+    padding-bottom: 64px;
+  }
+
+  .media-card {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .media-card::before {
+    background: linear-gradient(to top, rgba(8, 10, 13, 0.9), rgba(8, 10, 13, 0.08) 64%);
+  }
+
+  .media-overlay {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+  }
+
+  .media-overlay p {
+    margin-top: 8px;
+    font-size: 0.92rem;
+  }
+
+  .globe-section {
+    padding: 66px 0;
+  }
+
+  .globe-layout {
+    gap: 28px;
+  }
+
+  .globe-controls {
+    margin-top: 22px;
+  }
+
+  .featured-frame {
+    max-width: none;
+    margin-top: 20px;
+    padding: 15px;
+  }
+
+  .media-globe {
+    width: min(330px, 92vw);
+  }
+
+  .globe-core {
+    inset: 16%;
+    box-shadow: inset -24px -24px 54px rgba(0, 0, 0, 0.38), 0 18px 42px rgba(0, 0, 0, 0.24);
+  }
+
+  .globe-card {
+    width: clamp(68px, 21vw, 78px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+  }
+
+  .globe-card span {
+    right: 7px;
+    bottom: 7px;
+    left: 7px;
+    font-size: 0.58rem;
+  }
+
+  .about {
+    gap: 28px;
+  }
+
+  .service-list div {
+    padding: 18px;
+  }
+
+  .contact {
+    padding: 66px 0;
+  }
+
+  .contact-actions {
+    width: 100%;
+  }
+
+  .lightbox-panel {
+    max-height: 82svh;
+  }
+}
+
+@supports (content-visibility: auto) {
+  @media (max-width: 760px) {
+    .media-grid,
+    .globe-section,
+    .about,
+    .contact {
+      content-visibility: auto;
+      contain-intrinsic-size: 640px;
+    }
+  }
+}
