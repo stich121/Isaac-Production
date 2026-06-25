@@ -184,8 +184,9 @@ textarea {
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.03fr) minmax(320px, 0.78fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.65fr);
   align-items: center;
+  gap: 32px;
   min-height: 100svh;
   padding: 132px max(24px, calc((100vw - 1160px) / 2)) 90px;
   overflow: hidden;
@@ -212,6 +213,8 @@ textarea {
 }
 
 .hero-copy {
+  position: relative;
+  z-index: 2;
   max-width: 780px;
 }
 
@@ -312,9 +315,10 @@ h3 {
 
 .hero-portrait {
   position: relative;
+  z-index: 1;
   justify-self: end;
-  width: min(390px, 35vw);
-  min-width: 280px;
+  width: min(320px, 26vw);
+  min-width: 220px;
   aspect-ratio: 1;
 }
 
