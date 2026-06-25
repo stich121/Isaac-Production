@@ -233,10 +233,11 @@ h3 {
 }
 
 h1 {
-  max-width: 850px;
-  font-size: clamp(4.7rem, 11vw, 10.8rem);
-  line-height: 0.82;
+  max-width: 100%;
+  font-size: clamp(3.2rem, 6.4vw, 6.4rem);
+  line-height: 0.86;
   text-transform: uppercase;
+  overflow-wrap: break-word;
 }
 
 h2 {
